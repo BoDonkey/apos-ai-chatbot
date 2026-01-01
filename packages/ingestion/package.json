@@ -1,0 +1,26 @@
+{
+  "name": "@apos-chatbot/ingestion",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Data ingestion pipeline for scraping and processing documentation",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "scrape": "node src/scrapers/run-scraper.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@apos-chatbot/shared": "workspace:*",
+    "weaviate-ts-client": "^2.2.0",
+    "playwright": "^1.40.1",
+    "turndown": "^7.1.3",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.3.1",
+    "p-queue": "^8.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

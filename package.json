@@ -1,0 +1,25 @@
+{
+  "name": "apos-ai-chatbot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ApostropheCMS AI chatbot with Weaviate, LangChain, and Discord integration",
+  "scripts": {
+    "dev:server": "pnpm --filter @apos-chatbot/server dev",
+    "dev:ingest": "pnpm --filter @apos-chatbot/ingestion dev",
+    "ingest": "pnpm --filter @apos-chatbot/ingestion start",
+    "start": "pnpm --filter @apos-chatbot/server start",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "clean": "pnpm -r clean"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

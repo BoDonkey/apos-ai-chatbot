@@ -1,0 +1,33 @@
+{
+  "name": "@apos-chatbot/server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Chatbot query server with REST API and Socket.IO",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@apos-chatbot/shared": "workspace:*",
+    "@langchain/anthropic": "^0.1.0",
+    "@langchain/core": "^0.1.0",
+    "@langchain/openai": "^0.0.19",
+    "weaviate-ts-client": "^2.2.0",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "socket.io": "^4.6.0",
+    "cors": "^2.8.5",
+    "mongodb": "^6.3.0",
+    "sanitize-html": "^2.11.0",
+    "dotenv": "^16.3.1",
+    "langchain": "^0.1.0",
+    "uuid": "^9.0.1",
+    "csv-stringify": "^6.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

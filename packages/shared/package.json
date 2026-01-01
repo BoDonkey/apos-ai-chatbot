@@ -1,0 +1,14 @@
+{
+  "name": "@apos-chatbot/shared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared types, utilities, and configurations",
+  "main": "src/index.js",
+  "scripts": {
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  }
+}
