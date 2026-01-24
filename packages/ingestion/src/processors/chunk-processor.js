@@ -21,7 +21,7 @@ export function chunkText(text, config = {}) {
 
   /** @type {import('@apos-chatbot/shared').TextChunk[]} */
   const chunks = [];
-  
+
   // If text is shorter than max chunk size, return as single chunk
   if (text.length <= maxChunkSize) {
     return [{
@@ -36,18 +36,18 @@ export function chunkText(text, config = {}) {
 
   // Split recursively using separators
   const splits = recursiveSplit(text, separators, maxChunkSize);
-  
+
   // Create chunks with overlap
   for (let i = 0; i < splits.length; i++) {
     let chunkContent = splits[i];
-    
+
     // Add overlap from previous chunk if not first chunk
     if (i > 0 && overlap > 0) {
       const prevChunk = splits[i - 1];
       const overlapText = prevChunk.slice(-overlap);
       chunkContent = overlapText + ' ' + chunkContent;
     }
-    
+
     chunks.push({
       content: chunkContent.trim(),
       metadata: {
@@ -57,7 +57,7 @@ export function chunkText(text, config = {}) {
       }
     });
   }
-  
+
   return chunks;
 }
 
@@ -72,18 +72,18 @@ function recursiveSplit(text, separators, maxSize) {
   if (text.length <= maxSize) {
     return [text];
   }
-  
+
   const [separator, ...remainingSeparators] = separators;
-  
+
   if (!separator) {
     // No more separators, force split
     return forceSplit(text, maxSize);
   }
-  
+
   const parts = text.split(separator);
   const result = [];
   let currentChunk = '';
-  
+
   for (const part of parts) {
     if (currentChunk.length + part.length + separator.length <= maxSize) {
       currentChunk += (currentChunk ? separator : '') + part;
@@ -91,7 +91,7 @@ function recursiveSplit(text, separators, maxSize) {
       if (currentChunk) {
         result.push(currentChunk);
       }
-      
+
       // If part is too large, recursively split with next separator
       if (part.length > maxSize) {
         result.push(...recursiveSplit(part, remainingSeparators, maxSize));
@@ -101,11 +101,11 @@ function recursiveSplit(text, separators, maxSize) {
       }
     }
   }
-  
+
   if (currentChunk) {
     result.push(currentChunk);
   }
-  
+
   return result;
 }
 
@@ -131,17 +131,17 @@ function forceSplit(text, maxSize) {
  */
 export function processScrapedPages(pages, chunkConfig) {
   logger.info(`Processing ${pages.length} pages into chunks`);
-  
+
   /** @type {import('@apos-chatbot/shared').WeaviateDocument[]} */
   const documents = [];
-  
+
   for (const page of pages) {
     // Extract metadata from URL and content
     const metadata = extractMetadata(page);
-    
+
     // Chunk the content
     const chunks = chunkText(page.content, chunkConfig);
-    
+
     // Create documents from chunks
     for (const chunk of chunks) {
       documents.push({
@@ -161,7 +161,7 @@ export function processScrapedPages(pages, chunkConfig) {
       });
     }
   }
-  
+
   logger.info(`Created ${documents.length} document chunks from ${pages.length} pages`);
   return documents;
 }
@@ -174,13 +174,13 @@ export function processScrapedPages(pages, chunkConfig) {
 function extractMetadata(page) {
   const url = page.url.toLowerCase();
   const content = page.content.toLowerCase();
-  
+
   // Detect version
   let version = '4.x'; // Default to latest
   if (url.includes('/v3/') || url.includes('/3.x/')) {
     version = '3.x';
   }
-  
+
   // Detect framework
   let framework = 'core';
   if (url.includes('astro') || content.includes('astro')) {
@@ -190,7 +190,7 @@ function extractMetadata(page) {
   } else if (url.includes('nunjucks')) {
     framework = 'nunjucks';
   }
-  
+
   // Detect doc type
   let docType = 'guide';
   if (url.includes('/reference/') || url.includes('/api/')) {
@@ -200,16 +200,16 @@ function extractMetadata(page) {
   } else if (url.includes('/migration/')) {
     docType = 'migration';
   }
-  
+
   // Extract keywords from headings
   const keywords = page.metadata.headings
     .filter(h => h.length > 0)
     .map(h => h.toLowerCase())
     .slice(0, 10); // Limit to top 10
-  
+
   // Extract section from first heading
   const section = page.metadata.headings[0] || '';
-  
+
   return {
     version,
     framework,

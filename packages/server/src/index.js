@@ -10,13 +10,18 @@ import { rateLimit } from 'express-rate-limit';
 import { MongoClient } from 'mongodb';
 import weaviate from 'weaviate-ts-client';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import sanitizeHtml from 'sanitize-html';
 import { stringify } from 'csv-stringify/sync';
 import { requireEnv, getBoolEnv, getNumberEnv, createLogger, APOS_DOCS_SCHEMA } from '@apos-chatbot/shared';
 import { QueryHandler } from './query/handler.js';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+dotenv.config({ path: join(__dirname, '../../../.env') });
 
 const logger = createLogger('Server');
 
@@ -259,12 +264,12 @@ io.on('connection', (socket) => {
   if (!userSessionId) {
     userSessionId = uuidv4();
   }
-  
+
   sessions.set(socket.id, {
     userSessionId,
     requestInProgress: false
   });
-  
+
   socket.emit('session_id', { user_session_id: userSessionId });
   logger.info('Client connected', { sessionId: userSessionId });
 

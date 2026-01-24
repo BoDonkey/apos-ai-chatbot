@@ -3,18 +3,13 @@
  */
 
 import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
 import { requireEnv, createLogger } from '@apos-chatbot/shared';
 import { weaviateClient } from './weaviate/client.js';
 import { scrapeDocumentation } from './scrapers/playwright-scraper.js';
 import { processScrapedPages } from './processors/chunk-processor.js';
 import { processOpenAPISpec } from './processors/openapi-processor.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-dotenv.config({ path: join(__dirname, '../../../.env') });
+dotenv.config();
 
 const logger = createLogger('Ingestion');
 
@@ -77,11 +72,8 @@ async function main() {
 
     // Import to Weaviate
     logger.info('Importing documents to Weaviate');
-    if (aposDocuments.length > 0) {
-      await weaviateClient.batchImport(aposDocuments);
-    } else {
-      logger.warn('No ApostropheCMS documents to import');
-    }
+    await weaviateClient.batchImport(aposDocuments);
+
     // Optional: Process Astro docs from llms-full.txt
     if (includeAstro) {
       const astroDocsUrl = process.env.ASTRO_DOCS_URL || 'https://docs.astro.build/llms-full.txt';
